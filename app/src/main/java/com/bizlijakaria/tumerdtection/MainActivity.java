@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -29,9 +30,9 @@ import java.nio.channels.FileChannel;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView result, confidence;
+    TextView result, confidence,Classified,confidancetxt;
     ImageView imageView;
-    Button picture, upload;
+    Button picture, upload,verify;
     int imageSize = 224;
     int[] intValues = new int[imageSize * imageSize];
 
@@ -42,9 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
         result = findViewById(R.id.result);
         confidence = findViewById(R.id.confidence);
+        Classified=findViewById(R.id.classified);
+        confidancetxt=findViewById(R.id.confidencesText);
         imageView = findViewById(R.id.imageView);
         picture = findViewById(R.id.button);
         upload = findViewById(R.id.button2);
+        verify=findViewById(R.id.button3);
+
+
+
 
         picture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +71,28 @@ public class MainActivity extends AppCompatActivity {
                 // Open gallery to select an image
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, 2);
+
+                new CountDownTimer(2000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        // Do nothing here, as we want a 2-second timer
+                    }
+
+                    public void onFinish() {
+                        verify.setVisibility(View.VISIBLE);
+                    }
+                }.start();
+            }
+        });
+
+
+        verify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                verify.setVisibility(View.GONE);
+                result.setVisibility(View.VISIBLE);
+                confidancetxt.setVisibility(View.VISIBLE);
+                confidence.setVisibility(View.VISIBLE);
+                Classified.setVisibility(View.VISIBLE);
             }
         });
     }
